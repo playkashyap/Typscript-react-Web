@@ -36,7 +36,7 @@ function MyApp() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        PlayKasyap
       </Typography>
       <Divider />
       <List>
@@ -56,7 +56,7 @@ function MyApp() {
 
     <Box sx={{ display: 'flex', width: '100%', height: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
       <CssBaseline />
-      <AppBar component="nav" style={{ background: '', boxShadow: 'none'}}>
+      <AppBar component="nav" style={{ background: '', boxShadow: 'none' }}>
         <Toolbar>
           <Box>
             <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
@@ -72,7 +72,7 @@ function MyApp() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            PlayKasyap
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
@@ -94,11 +94,9 @@ function MyApp() {
 
         </Drawer>
       </Box>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main">
         <Toolbar />
-        <Typography>
-          <Landing />
-        </Typography>
+        <Landing />
       </Box>
     </Box>
   );
