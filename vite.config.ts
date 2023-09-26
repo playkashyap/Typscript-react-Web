@@ -6,9 +6,9 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
   registerType: "prompt",
   includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
   manifest: {
-    name: "Weather Ups",
-    short_name: "Weathe Ups",
-    description: "An app that can show weather forecast for your city.",
+    name: "Portfolio",
+    short_name: "Portfolio",
+    description: "Portfolio of my work",
     icons: [
       {
         src: "/android-chrome-192x192.png",

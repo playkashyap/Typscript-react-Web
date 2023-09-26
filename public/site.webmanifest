@@ -1,7 +1,7 @@
 {
-	"name": "Weather Ups",
-	"short_name": "Weather Ups",
-	"description": "An app that can show weather forecast for your city.",
+	"name": "Portfolio",
+	"short_name": "Portfolio",
+    "description": "Portfolio of my work",
 	"icons": [
 		{
 			"src": "/android-chrome-192x192.png",
