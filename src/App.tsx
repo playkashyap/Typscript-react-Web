@@ -16,7 +16,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Landing from './Components/landingPage/landing.tsx';
+import { RouterProvider } from 'react-router-dom';
+import Router from './routes';
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 const drawerWidth = 240;
@@ -39,13 +40,21 @@ function MyApp() {
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem disablePadding>
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+              <ListItemText>Home</ListItemText>
             </ListItemButton>
           </ListItem>
-        ))}
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemText>About me</ListItemText>
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemText>Contact</ListItemText>
+            </ListItemButton>
+          </ListItem>
       </List>
     </Box>
   );
@@ -55,7 +64,7 @@ function MyApp() {
 
     <Box sx={{ display: 'flex', width: '100%', height: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
       <CssBaseline />
-      <AppBar component="nav" sx={{color : ''}}>
+      <AppBar component="nav" sx={{ backgroundColor : 'transparent'}}>
         <Toolbar>
           <Box>
             <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
@@ -77,11 +86,15 @@ function MyApp() {
             <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
               {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
+              <Button sx={{ color: '#fff' }}>
+                Home
               </Button>
-            ))}
+              <Button sx={{ color: '#fff' }}>
+                About Me
+              </Button>
+              <Button sx={{ color: '#fff' }}>
+                Contact
+              </Button>
           </Box>
         </Toolbar>
       </AppBar>
@@ -95,7 +108,7 @@ function MyApp() {
       </Box>
       <Box component="main">
         <Toolbar />
-        <Landing />
+        <RouterProvider router={Router} />
       </Box>
     </Box>
   );
