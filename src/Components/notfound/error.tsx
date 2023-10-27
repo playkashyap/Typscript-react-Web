@@ -11,8 +11,7 @@ const Error = () => {
             <a href="https://codepen.io/ZonFire99/full/njdls/" className="viewFull" target="_parent">View in full it looks way better :)</a>
 
             <div className="error">
-
-                <div className="wrap">
+                {/* <div className="wrap"> */}
                     <div className="404">
                         <pre>
                             <code>
@@ -41,7 +40,7 @@ const Error = () => {
                             </code>
                         </pre>
                     </div>
-                </div>
+                {/* </div> */}
             </div>
         </div>
     )
