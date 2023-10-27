@@ -7,7 +7,7 @@ const Error = () => {
 
 
     return (
-        <>
+        <div className='error2'>
             <a href="https://codepen.io/ZonFire99/full/njdls/" className="viewFull" target="_parent">View in full it looks way better :)</a>
 
             <div className="error">
@@ -43,7 +43,7 @@ const Error = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
