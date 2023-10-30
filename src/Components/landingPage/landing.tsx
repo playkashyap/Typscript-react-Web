@@ -1,10 +1,9 @@
-import { Box } from '@mui/material';
-
+import ModelViewer from './ModelViewer';
 
 export default function Landing() {
     return (
-        <Box>
-            Home directory
-        </Box>
+        <>
+            <ModelViewer scale="10" modelPath={"/model.glb"} />
+        </>
     );
 }

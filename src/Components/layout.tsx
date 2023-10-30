@@ -16,7 +16,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Outlet, NavLink, redirect } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
+import { redirect } from "react-router-dom";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 const drawerWidth = 240;
@@ -30,8 +31,8 @@ function MyApp() {
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
     };
+    redirect('/home')
 
-    
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -40,27 +41,27 @@ function MyApp() {
             </Typography>
             <Divider />
             <List>
-                <ListItem disablePadding>
-                    <NavLink to={'/home'}>
+                <NavLink to={'/'}>
+                    <ListItem disablePadding>
                         <ListItemButton sx={{ textAlign: 'center' }} >
                             <ListItemText>Home</ListItemText>
                         </ListItemButton>
-                    </NavLink>
-                </ListItem>
-                <ListItem disablePadding>
-                    <NavLink to={'/about'}>
+                    </ListItem>
+                </NavLink>
+                <NavLink to={'/about'}>
+                    <ListItem disablePadding>
                         <ListItemButton sx={{ textAlign: 'center' }}>
                             <ListItemText>About me</ListItemText>
                         </ListItemButton>
-                    </NavLink>
-                </ListItem>
-                <ListItem disablePadding>
-                    <NavLink to={'/contact'}>
+                    </ListItem>
+                </NavLink>
+                <NavLink to={'/contact'}>
+                    <ListItem disablePadding>
                         <ListItemButton sx={{ textAlign: 'center' }} >
                             <ListItemText>Contact</ListItemText>
                         </ListItemButton>
-                    </NavLink>
-                </ListItem>
+                    </ListItem>
+                </NavLink>
             </List>
         </Box>
     );
@@ -88,7 +89,7 @@ function MyApp() {
                         <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
                             {theme.palette.mode === 'dark' ? <Brightness7Icon sx={{ color: '#fff' }} /> : <Brightness4Icon sx={{ color: '#000' }} />}
                         </IconButton>
-                        <NavLink to={'/home'}>
+                        <NavLink to={'/'}>
                             <Button sx={{ color: theme.palette.mode === 'dark' ? '#fff' : '#000' }}>
                                 Home
                             </Button>
