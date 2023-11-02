@@ -1,9 +1,11 @@
 import ModelViewer from './ModelViewer';
 
 export default function Landing() {
+    const path : any = "/model.glb";
+    const scale : number = 3;
     return (
         <>
-            <ModelViewer scale="10" modelPath={"/model.glb"} />
+            <ModelViewer scale={scale} modelPath={path} />
         </>
     );
 }
