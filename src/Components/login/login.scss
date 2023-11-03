@@ -1,0 +1,15 @@
+.loginBg{
+    background-image: url('../../assets/imageBg.jpg');
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+}
+
+.loginCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
