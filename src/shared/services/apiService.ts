@@ -11,9 +11,10 @@ const apiService = (URL: any, Meathod: any, Body?: any) => {
         },
         body: Body
     }).pipe(
-        map(response => console.log('response: ', response)),
+        map(response => {
+            return response;
+        }),
         catchError(error => {
-            console.log('error: ', error);
             return of(error);
         })
     );

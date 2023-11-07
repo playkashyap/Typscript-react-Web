@@ -17,13 +17,18 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Outlet, NavLink } from 'react-router-dom';
-import { redirect } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
+import Login from './login/login';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 const drawerWidth = 240;
 
 
-function MyApp() {
+function MyApp(props : any) {
+
+    const logout = props.onLogout;
     const theme = useTheme();
     const colorMode = React.useContext(ColorModeContext);
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -31,7 +36,6 @@ function MyApp() {
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
     };
-    redirect('/home')
 
 
     const drawer = (
@@ -41,7 +45,7 @@ function MyApp() {
             </Typography>
             <Divider />
             <List>
-                <NavLink to={'/'}>
+                <NavLink to={'/admin'}>
                     <ListItem disablePadding>
                         <ListItemButton sx={{ textAlign: 'center' }} >
                             <ListItemText>Home</ListItemText>
@@ -89,7 +93,7 @@ function MyApp() {
                         <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
                             {theme.palette.mode === 'dark' ? <Brightness7Icon sx={{ color: '#fff' }} /> : <Brightness4Icon sx={{ color: '#000' }} />}
                         </IconButton>
-                        <NavLink to={'/'}>
+                        <NavLink to={'/admin'}>
                             <Button sx={{ color: theme.palette.mode === 'dark' ? '#fff' : '#000' }}>
                                 Home
                             </Button>
@@ -104,6 +108,9 @@ function MyApp() {
                                 Contact
                             </Button>
                         </NavLink>
+                        <IconButton onClick={() => logout(true)}>
+                            <LogoutIcon />
+                        </IconButton>
                     </Box>
                 </Toolbar>
             </AppBar>
@@ -123,6 +130,8 @@ function MyApp() {
 
 function Layout() {
 
+    const token = localStorage.getItem('token');
+    const [loggedIn, setLoggedIn] = React.useState(false);
 
     const [mode, setMode] = React.useState<'light' | 'dark'>('light');
     const colorMode = React.useMemo(
@@ -144,13 +153,48 @@ function Layout() {
         [mode],
     );
 
+    React.useEffect(() => {
+        if (token) {
+            setLoggedIn(true);
+        } else {
+            setLoggedIn(false);
+        }
+    }, [token]);
+
+    const checkLogin = (event: any) => {
+
+        if (event) {
+            setLoggedIn(true);
+            toast.success('Welcome', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+
+
+        } else {
+            setLoggedIn(false);
+        }
+    }
+
+    const Logout = (event: any) => {
+        setLoggedIn(false);
+        localStorage.removeItem('token');
+    }
+
     return (
         <ColorModeContext.Provider value={colorMode}>
             <ThemeProvider theme={theme}>
-                <MyApp />
+                {loggedIn ? <MyApp onLogout={(e : any) => Logout(e)} /> : <Login onLogin={(e: any) => checkLogin(e)} />}
+                <ToastContainer />
             </ThemeProvider>
         </ColorModeContext.Provider>
     );
 }
 
-export default Layout
+export default Layout;

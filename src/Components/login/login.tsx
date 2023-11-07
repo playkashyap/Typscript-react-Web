@@ -9,26 +9,17 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import LoginIcon from '@mui/icons-material/Login';
 import apiService from '../../shared/services/apiService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Login = () => {
+const Login = (props : any) => {
+
+    const onLogin = props.onLogin;
     document.body.className = 'loginBg';
-
-
-    // React.useEffect(() => {
-
-    //     const body = {
-    //         username: 'kminchelle',
-    //         password: '0lelplR',
-    //     }
-
-    //     const response = apiService('auth/login', 'POST', body);
-    //     response.subscribe((res) => {
-    //         console.log(res);
-    //     });
-    // }, []);
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [errorInCredantials, setErrorInCredantials] = React.useState(false);
 
 
     const handleSubmit = (username: any, password: any) => {
@@ -40,14 +31,28 @@ const Login = () => {
 
         const response = apiService('auth/login', 'POST', body);
         response.subscribe((res) => {
-            console.log(res);
+            if (res.status === 400) {
+                setErrorInCredantials(true);
+                toast.error(res.response.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+                onLogin(false);
+            } else if (res.status === 200) {
+                localStorage.setItem('token', res.response.token);
+                onLogin(true);
+            }
         });
-
     }
 
 
-    function login() {
-
+    const login = () => {
         handleSubmit(username, password);
     }
 
@@ -63,6 +68,7 @@ const Login = () => {
                         <h1 style={{ textAlign: 'center', marginTop: '30px', marginBottom: '30px', color: 'whitesmoke' }}>Login</h1>
                         <Box component="form">
                             <TextField
+                                error={errorInCredantials}
                                 id="standard-basic"
                                 sx={{ width: '100%', input: { color: "white", } }}
                                 InputLabelProps={{ style: { color: 'white' } }}
@@ -71,6 +77,7 @@ const Login = () => {
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                             <TextField
+                                error={errorInCredantials}
                                 id="standard-basic"
                                 sx={{ width: '100%', marginTop: 3, input: { color: "white", } }}
                                 InputLabelProps={{ style: { color: 'white' } }}
@@ -81,13 +88,13 @@ const Login = () => {
                             />
                         </Box>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
-                            <Button variant="contained" endIcon={<LoginIcon />} >
+                            <Button variant="contained" endIcon={<LoginIcon />} onClick={() => login()}>
                                 Login
                             </Button>
                         </div>
                     </CardContent>
                     <CardActions>
-                        <Button size="small" onClick={login}>Learn More</Button>
+                        <Button size="small" >Learn More</Button>
                     </CardActions>
                 </Card>
             </div>
