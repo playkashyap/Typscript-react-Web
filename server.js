@@ -70,22 +70,95 @@ app.post('/login', (req, res) => {
 
 
 app.post('/register', (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, firstName, lastName, email, gender, nationality, phoneNumber } = req.body;
 
-    bcrypt.hash(password, 10, (err, hash) => {
-        if (err) {
-            res.status(500).json({ error: err });
+    let validations = [];
+    let regexNumber = /^(?=.*[0-9])/; // checks if password contains at least one number
+    let regexSpecialChar = /^(?=.*[!@#$%^&*])/; // checks if password contains at least one special character
+    let regexUppercase = /^(?=.*[A-Z])/; // checks if password contains at least one uppercase letter
+
+    let passwordMessage = '';
+
+    if (!username) {
+        validations.push({ key: 'username', message: 'Username is required' });
+    } else {
+        if (username && (username.length > 10 || username.length <= 4)) validations.push({ key: 'username', message: 'Username should be between 5 to 9 characters long' })
+    }
+
+    if (password) {
+        if (password.length < 8 || password.length > 20) {
+            passwordMessage += 'Password Sould be Between between 8 to 20 characters.';
         } else {
-            fs.readFile('users.json', (err, data) => {
-                if (err) throw err;
 
-                let users = JSON.parse(data);
-                users.push({ username: username, password: hash });
+            if (!regexNumber.test(password)) {
+                passwordMessage += 'Should contain at least one number, ';
+            } else {
+                passwordMessage = ''
+            }
+            if (!regexSpecialChar.test(password)) {
+                passwordMessage += 'Should contain at least one special character, ';
+            } else {
+                passwordMessage = ''
+            }
+            if (!regexUppercase.test(password)) {
+                passwordMessage += 'Should contain at least one uppercase letter. ';
+            } else {
+                passwordMessage = ''
+            }
+        }
+    } else {
+        passwordMessage = 'Password is required.';
+    }
 
-                fs.writeFile('users.json', JSON.stringify(users), (err) => {
-                    if (err) throw err;
-                    res.json({ status: 'success', message: 'User registered successfully!' });
-                });
+    if (passwordMessage) {
+        validations.push({ key: 'password', message: passwordMessage.trim() });
+    }
+    if (!firstName) validations.push({ key: 'firstName', message: 'First name is required' });
+    if (!lastName) validations.push({ key: 'lastName', message: 'Last name is required' });
+    if (!email) validations.push({ key: 'email', message: 'Email is required' });
+    if (!gender) validations.push({ key: 'gender', message: 'Gender is required' });
+    if (!nationality) validations.push({ key: 'nationality', message: 'Nationality is required' });
+    if (!phoneNumber) validations.push({ key: 'phoneNumber', message: 'Phone number is required' });
+
+
+
+    if (validations.length) {
+        res.status(400).json({ status: 'error', validations: validations });
+        return;
+    }
+
+
+
+
+    fs.readFile('users.json', (err, data) => {
+        if (err) throw err;
+
+        let users = JSON.parse(data);
+        let userExists = users.some((user) => user.username === username);
+
+        if (userExists) {
+            res.status(400).json({ status: 'error', message: 'Username already exists' });
+        } else {
+            bcrypt.hash(password, 10, (err, hash) => {
+                if (err) {
+                    res.status(500).json({ error: err });
+                } else {
+                    users.push({
+                        username: username,
+                        password: hash,
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        gender: gender,
+                        nationality: nationality,
+                        phoneNumber: phoneNumber
+                    });
+
+                    fs.writeFile('users.json', JSON.stringify(users), (err) => {
+                        if (err) throw err;
+                        res.json({ status: 'success', message: 'User registered successfully!' });
+                    });
+                }
             });
         }
     });

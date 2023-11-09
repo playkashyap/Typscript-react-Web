@@ -9,10 +9,10 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import LoginIcon from '@mui/icons-material/Login';
 import apiService from '../../shared/services/apiService';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Login = (props : any) => {
+const Login = (props: any) => {
 
     const onLogin = props.onLogin;
     document.body.className = 'loginBg';
@@ -29,7 +29,7 @@ const Login = (props : any) => {
             password: password,
         }
 
-        const response = apiService('auth/login', 'POST', body);
+        const response = apiService('login', 'POST', body);
         response.subscribe((res) => {
             if (res.status === 400) {
                 setErrorInCredantials(true);
