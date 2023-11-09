@@ -2,5 +2,9 @@
     {
         "username": "Vamshi",
         "password": "$2b$10$I/mawqmjJzapTp5L5wHazeMYYs0GCSy/ILsdprK4KRbaRtkKWiTJW"
+    },
+    {
+        "username": "abhay",
+        "password": "$2b$10$4QeqJ7MtbPTOjdvK5iQ00e5WIHrOGPy9q6k0bW/dtZCF98eOVQSKK"
     }
 ]
