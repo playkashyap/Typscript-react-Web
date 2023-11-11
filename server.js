@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -89,6 +89,7 @@ app.post('/register', (req, res) => {
         if (password.length < 8 || password.length > 20) {
             passwordMessage += 'Password Sould be Between between 8 to 20 characters.';
         } else {
+            
 
             if (!regexNumber.test(password)) {
                 passwordMessage += 'Should contain at least one number, ';

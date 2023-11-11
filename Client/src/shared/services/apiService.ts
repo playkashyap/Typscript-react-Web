@@ -4,7 +4,7 @@ import { map, catchError, of } from 'rxjs';
 const apiService = (URL: any, Meathod: any, Body?: any) => {
 
     const apiResponse = ajax({
-        url: `http://localhost:5000/${URL}`,
+        url: `http://localhost:3000/${URL}`,
         method: Meathod,
         headers: {
             'Content-Type': 'application/json',

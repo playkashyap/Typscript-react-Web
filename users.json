@@ -1,1 +1,20 @@
-[{"username":"Vamshi","password":"$2b$10$I/mawqmjJzapTp5L5wHazeMYYs0GCSy/ILsdprK4KRbaRtkKWiTJW"},{"username":"abhay","password":"$2b$10$4QeqJ7MtbPTOjdvK5iQ00e5WIHrOGPy9q6k0bW/dtZCF98eOVQSKK"},{"username":"abhskwjcn","password":"$2b$10$eveUjkY8aXGj1wsEvxiQlOYzibsV2q.bGnIz/mc.1etm6bMBA4x1G","firstName":"abhay","lastName":"Doe","email":"john.doe@example.com","gender":"Male","nationality":"American","phoneNumber":"1234567890"}]
+[
+    {
+        "username": "Vamshi",
+        "password": "$2b$10$I/mawqmjJzapTp5L5wHazeMYYs0GCSy/ILsdprK4KRbaRtkKWiTJW"
+    },
+    {
+        "username": "abhay",
+        "password": "$2b$10$4QeqJ7MtbPTOjdvK5iQ00e5WIHrOGPy9q6k0bW/dtZCF98eOVQSKK"
+    },
+    {
+        "username": "abhskwjcn",
+        "password": "$2b$10$eveUjkY8aXGj1wsEvxiQlOYzibsV2q.bGnIz/mc.1etm6bMBA4x1G",
+        "firstName": "abhay",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "gender": "Male",
+        "nationality": "American",
+        "phoneNumber": "1234567890"
+    }
+]
