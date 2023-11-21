@@ -128,9 +128,6 @@ app.post('/register', (req, res) => {
         return;
     }
 
-
-
-
     fs.readFile('users.json', (err, data) => {
         if (err) throw err;
 
