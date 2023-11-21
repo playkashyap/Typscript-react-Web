@@ -90,7 +90,6 @@ app.post('/register', (req, res) => {
             passwordMessage += 'Password Sould be Between between 8 to 20 characters.';
         } else {
             
-
             if (!regexNumber.test(password)) {
                 passwordMessage += 'Should contain at least one number, ';
             } else {
