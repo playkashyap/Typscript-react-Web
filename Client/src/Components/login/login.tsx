@@ -166,7 +166,7 @@ const Login = (props: any) => {
                                 <Box component="form">
                                     <TextField
                                         error={errorInCredantials}
-                                        id="standard-basic"
+                                        id="username"
                                         sx={{ width: '100%', input: { color: "white", } }}
                                         InputLabelProps={{ style: { color: 'white' } }}
                                         label="Username" variant="filled"
@@ -175,7 +175,7 @@ const Login = (props: any) => {
                                     />
                                     <TextField
                                         error={errorInCredantials}
-                                        id="standard-basic"
+                                        id="newpass"
                                         sx={{ width: '100%', marginTop: 3, input: { color: "white", } }}
                                         InputLabelProps={{ style: { color: 'white' } }}
                                         label="Password"
@@ -205,7 +205,7 @@ const Login = (props: any) => {
                                 <Box component="form">
                                     <TextField
                                         error={userNameError.length > 0}
-                                        id="standard-basic"
+                                        id="newUsername"
                                         sx={{ width: '100%', input: { color: "white", } }}
                                         InputLabelProps={{ style: { color: 'white' } }}
                                         label="Username" variant="filled"
@@ -240,9 +240,9 @@ const Login = (props: any) => {
                                         </FormControl>
 
                                         <FormControl sx={{ width: '100%' }} variant="filled">
-                                            <InputLabel htmlFor="filled-adornment-password" sx={{ color: "white" }} >Confirm Password</InputLabel>
+                                            <InputLabel htmlFor="filled-adornment-confPassword" sx={{ color: "white" }} >Confirm Password</InputLabel>
                                             <FilledInput
-                                                id="filled-adornment-password"
+                                                id="filled-adornment-confPassword"
                                                 type={showConfPassword ? 'text' : 'password'}
                                                 sx={{ input: { color: "white", } }}
                                                 onChange={getConfPassword}
@@ -270,7 +270,7 @@ const Login = (props: any) => {
                                         <TextField
                                             variant="filled"
                                             error={userNameError.length > 0}
-                                            id="standard-basic"
+                                            id="firstName"
                                             sx={{ width: '100%', input: { color: "white", }, }}
                                             InputLabelProps={{ style: { color: 'white' } }}
                                             label="First Name"
@@ -280,7 +280,7 @@ const Login = (props: any) => {
                                         <TextField
                                             variant="filled"
                                             error={userNameError.length > 0}
-                                            id="standard-basic"
+                                            id="lastName"
                                             sx={{ width: '100%', input: { color: "white", }, }}
                                             InputLabelProps={{ style: { color: 'white' } }}
                                             label="Last Name"
@@ -292,7 +292,7 @@ const Login = (props: any) => {
                                     <TextField
                                         variant="filled"
                                         error={userNameError.length > 0}
-                                        id="standard-basic"
+                                        id="email"
                                         sx={{ width: '100%', input: { color: "white", }, marginTop: 3 }}
                                         InputLabelProps={{ style: { color: 'white' } }}
                                         label="Email"
@@ -353,7 +353,7 @@ const Login = (props: any) => {
                                             </Select>
                                         </FormControl>
                                         <MuiTelInput
-                                            sx={{ width: '100%' }}
+                                            sx={{ width: '100%', color: "white", input : {color: "white"} }}
                                             value={phone}
                                             variant='filled'
                                             defaultCountry="IN"
