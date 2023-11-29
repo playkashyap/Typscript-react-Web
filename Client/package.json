@@ -20,6 +20,7 @@
     "@react-three/fiber": "^8.15.9",
     "@types/three": "^0.158.1",
     "@vite-pwa/assets-generator": "^0.0.10",
+    "mui-tel-input": "^4.0.1",
     "primereact": "^9.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
