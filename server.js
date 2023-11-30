@@ -2,13 +2,40 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
-const fs = require('fs');
 
 const bcrypt = require('bcrypt');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
+const uri = "mongodb+srv://jackwill7080:Kashyap7080@portfoliokash.kyrqmza.mongodb.net/?retryWrites=true&w=majority";
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+
+const client = new MongoClient(uri, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
+});
+
+async function run() {
+    try {
+        // Connect the client to the server	(optional starting in v4.7)
+        await client.connect();
+        // Send a ping to confirm a successful connection
+        await client.db("PortfolioKash").command({ ping: 1 });
+
+        // const collection = client.db("PortfolioKash").collection("Users");
+        // const documents = await collection.find({}).toArray();
+        console.log("Connected successfully to server");
+    } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+}
+run().catch(console.dir);
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -43,17 +70,20 @@ app.get('/express_backend', verifyToken, (req, res) => {
 });
 
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    fs.readFile('users.json', (err, data) => {
-        if (err) throw err;
+    try {
+        await client.connect();
 
-        let users = JSON.parse(data);
-        let user = users.find((user) => user.username === username);
+        const db = client.db("PortfolioKash");
+
+        const collection = db.collection("Users");
+
+        const user = await collection.findOne({ username: username });
 
         if (user) {
-            bcrypt.compare(password, user.password, (err, result) => {
+            bcrypt.compare(password, user.password, async (err, result) => {
                 if (result) {
                     const token = jwt.sign({ username: user.username }, 'your-secret-key', { expiresIn: '1h' });
                     res.json({ status: 'success', message: 'Login successful!', token: token });
@@ -64,12 +94,14 @@ app.post('/login', (req, res) => {
         } else {
             res.status(400).json({ status: 'error', message: 'Invalid username or password' });
         }
-    });
+    } finally {
+        await client.close();
+    }
 });
 
 
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
     const { username, password, firstName, lastName, email, gender, nationality, phoneNumber } = req.body;
 
     let validations = [];
@@ -89,7 +121,7 @@ app.post('/register', (req, res) => {
         if (password.length < 8 || password.length > 20) {
             passwordMessage += 'Password Sould be Between between 8 to 20 characters.';
         } else {
-            
+
             if (!regexNumber.test(password)) {
                 passwordMessage += 'Should contain at least one number, ';
             } else {
@@ -127,36 +159,36 @@ app.post('/register', (req, res) => {
         return;
     }
 
-    fs.readFile('users.json', (err, data) => {
-        if (err) throw err;
+    try {
+        await client.connect();
+        const db = client.db("PortfolioKash");
+        const collection = db.collection("Users");
+        const existingUser = await collection.findOne({ username });
 
-        let users = JSON.parse(data);
-        let userExists = users.some((user) => user.username === username);
-
-        if (userExists) {
+        if (existingUser) {
             res.status(400).json({ status: 'error', message: 'Username already exists' });
         } else {
-            bcrypt.hash(password, 10, (err, hash) => {
-                if (err) {
-                    res.status(500).json({ error: err });
-                } else {
-                    users.push({
-                        username: username,
-                        password: hash,
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        gender: gender,
-                        nationality: nationality,
-                        phoneNumber: phoneNumber
-                    });
-
-                    fs.writeFile('users.json', JSON.stringify(users), (err) => {
-                        if (err) throw err;
-                        res.json({ status: 'success', message: 'User registered successfully!' });
-                    });
-                }
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const result = await collection.insertOne({
+                username,
+                password: hashedPassword,
+                firstName,
+                lastName,
+                email,
+                gender,
+                nationality,
+                phoneNumber
             });
+
+            if (result.acknowledged === true) {
+                res.json({ status: 'success', message: 'Registration successful!' });
+            } else {
+                res.status(400).json({ status: 'error', message: 'Registration failed' });
+            }
         }
-    });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'An error occurred during registration' });
+    } finally {
+        await client.close();
+    }
 });

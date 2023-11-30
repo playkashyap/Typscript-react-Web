@@ -212,6 +212,43 @@ const Login = (props: any) => {
                                         value={newUsername}
                                         onChange={(e) => setNewUsername(e.target.value)}
                                     />
+                                    <TextField
+                                        variant="filled"
+                                        error={userNameError.length > 0}
+                                        id="email"
+                                        sx={{ width: '100%', input: { color: "white", }, marginTop: 3 }}
+                                        InputLabelProps={{ style: { color: 'white' } }}
+                                        label="Email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                    <Stack
+                                        direction={{ xs: 'column', sm: 'row' }}
+                                        spacing={{ xs: 1, sm: 2, md: 4 }}
+                                        sx={{ marginTop: 3 }}
+                                    >
+                                        <TextField
+                                            variant="filled"
+                                            error={userNameError.length > 0}
+                                            id="firstName"
+                                            sx={{ width: '100%', input: { color: "white", }, }}
+                                            InputLabelProps={{ style: { color: 'white' } }}
+                                            label="First Name"
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                        />
+                                        <TextField
+                                            variant="filled"
+                                            error={userNameError.length > 0}
+                                            id="lastName"
+                                            sx={{ width: '100%', input: { color: "white", }, }}
+                                            InputLabelProps={{ style: { color: 'white' } }}
+                                            label="Last Name"
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                        />
+
+                                    </Stack>
                                     <Stack
                                         direction={{ xs: 'column', sm: 'row' }}
                                         spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -262,43 +299,6 @@ const Login = (props: any) => {
                                         </FormControl>
 
                                     </Stack>
-                                    <Stack
-                                        direction={{ xs: 'column', sm: 'row' }}
-                                        spacing={{ xs: 1, sm: 2, md: 4 }}
-                                        sx={{ marginTop: 3 }}
-                                    >
-                                        <TextField
-                                            variant="filled"
-                                            error={userNameError.length > 0}
-                                            id="firstName"
-                                            sx={{ width: '100%', input: { color: "white", }, }}
-                                            InputLabelProps={{ style: { color: 'white' } }}
-                                            label="First Name"
-                                            value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)}
-                                        />
-                                        <TextField
-                                            variant="filled"
-                                            error={userNameError.length > 0}
-                                            id="lastName"
-                                            sx={{ width: '100%', input: { color: "white", }, }}
-                                            InputLabelProps={{ style: { color: 'white' } }}
-                                            label="Last Name"
-                                            value={lastName}
-                                            onChange={(e) => setLastName(e.target.value)}
-                                        />
-
-                                    </Stack>
-                                    <TextField
-                                        variant="filled"
-                                        error={userNameError.length > 0}
-                                        id="email"
-                                        sx={{ width: '100%', input: { color: "white", }, marginTop: 3 }}
-                                        InputLabelProps={{ style: { color: 'white' } }}
-                                        label="Email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
                                     <Autocomplete
                                         id="country-select"
                                         options={countryList}
@@ -353,7 +353,7 @@ const Login = (props: any) => {
                                             </Select>
                                         </FormControl>
                                         <MuiTelInput
-                                            sx={{ width: '100%', color: "white", input : {color: "white"} }}
+                                            sx={{ width: '100%', color: "white", input: { color: "white" } }}
                                             value={phone}
                                             variant='filled'
                                             defaultCountry="IN"
