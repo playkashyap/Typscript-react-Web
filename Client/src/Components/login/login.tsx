@@ -23,10 +23,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { countryList } from '../../shared/countries/countryList';
 import { MuiTelInput } from 'mui-tel-input'
-
+import FormHelperText from '@mui/material/FormHelperText';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { events } from '@react-three/fiber';
 
 
 
@@ -35,29 +34,50 @@ const Login = (props: any) => {
     const onLogin = props.onLogin;
     document.body.className = 'loginBg';
 
+    const [changeSignup, setChangeSignup] = React.useState(false);
+
+    // for login
+
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [errorInCredantials, setErrorInCredantials] = React.useState(false);
 
+    // for signup
+
+
+    // username
     const [newUsername, setNewUsername] = React.useState('');
     const [userNameError, setUserNameError] = React.useState('');
 
-    const [errorInCredantials, setErrorInCredantials] = React.useState(false);
-    const [changeSignup, setChangeSignup] = React.useState(false);
-
+    // password
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfPassword, setShowConfPassword] = React.useState(false);
 
-    const [gender, setGender] = React.useState('');
-    const [phone, setPhone] = React.useState('');
-    const [country, setCountry] = React.useState('');
-
     const [newPassword, setNewPassword] = React.useState('');
     const [confNewPassword, setConfNewPassword] = React.useState('');
+    const [passwordError, setPasswordError] = React.useState('');
+    const [passBool, setPassBool] = React.useState(false);
 
+    // gender 
+    const [gender, setGender] = React.useState('');
+
+    // phone 
+    const [phone, setPhone] = React.useState('');
+
+    // country
+    const [country, setCountry] = React.useState('');
+    const [countryError, setCountryError] = React.useState('');
+
+    //  name
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
 
+    const [firstNameError, setFirstNameError] = React.useState('');
+    const [lastNameError, setLastNameError] = React.useState('');
+
+    // email
     const [email, setEmail] = React.useState('');
+    const [emailError, setEmailError] = React.useState('');
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleClickShowConfPassword = () => setShowConfPassword((show) => !show);
@@ -123,6 +143,7 @@ const Login = (props: any) => {
 
     const handleCountryChange = (event: any) => {
         setCountry(event.target.textContent);
+        setCountryError('');
     }
 
     const getPassword = (event: any) => {
@@ -139,15 +160,75 @@ const Login = (props: any) => {
         const body = {
             username: newUsername,
             password: newPassword,
+            confPassword: confNewPassword,
             firstName: firstName,
             lastName: lastName,
             email: email,
             gender: gender,
-            nationality: country,
-            phoneNumber: "1234567890"
+            country: country,
+            phoneNumber: phone
         }
 
         console.log(body);
+
+        const response = apiService('register', 'POST', body);
+        response.subscribe((res) => {
+            if (res.status === 400) {
+                toast.error(res.response.status, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+                console.log(res);
+
+                for (let item of res.response.validations) {
+                    switch (item.key) {
+                        case 'username':
+                            setUserNameError(item.message);
+                            break;
+                        case 'email':
+                            setEmailError(item.message);
+                            break;
+                        case 'firstName':
+                            setFirstNameError(item.message);
+                            break;
+                        case 'lastName':
+                            setLastNameError(item.message);
+                            break;
+                        case 'password':
+                            setPasswordError(item.message);
+                            setPassBool(true);
+                            break;
+                        case 'country':
+                            setCountryError(item.message);
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+
+            } else if (res.status === 200) {
+                toast.success('Registered Successfully', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+                goToLogin();
+            }
+        });
+
+
 
     }
 
@@ -200,7 +281,7 @@ const Login = (props: any) => {
                     <div className="loginCard">
                         <Card sx={{ minWidth: 300, maxWidth: 1000, background: 'transparent', boxShadow: 'none' }}>
                             <CardContent>
-                                <h1 style={{ textAlign: 'center', marginTop: '30px', marginBottom: '30px', color: 'whitesmoke' }}>Register</h1>
+                                <h1 style={{ textAlign: 'center', marginTop: '30px', color: 'whitesmoke' }}>Register</h1>
 
                                 <Box component="form">
                                     <TextField
@@ -210,17 +291,19 @@ const Login = (props: any) => {
                                         InputLabelProps={{ style: { color: 'white' } }}
                                         label="Username" variant="filled"
                                         value={newUsername}
-                                        onChange={(e) => setNewUsername(e.target.value)}
+                                        onChange={(e) => { setNewUsername(e.target.value); setUserNameError('') }}
+                                        helperText={userNameError.length > 0 ? userNameError : null}
                                     />
                                     <TextField
                                         variant="filled"
-                                        error={userNameError.length > 0}
+                                        error={emailError.length > 0}
                                         id="email"
                                         sx={{ width: '100%', input: { color: "white", }, marginTop: 3 }}
                                         InputLabelProps={{ style: { color: 'white' } }}
                                         label="Email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={(e) => { setEmail(e.target.value); setEmailError('') }}
+                                        helperText={emailError.length > 0 ? emailError : null}
                                     />
                                     <Stack
                                         direction={{ xs: 'column', sm: 'row' }}
@@ -229,23 +312,25 @@ const Login = (props: any) => {
                                     >
                                         <TextField
                                             variant="filled"
-                                            error={userNameError.length > 0}
+                                            error={firstNameError.length > 0}
                                             id="firstName"
                                             sx={{ width: '100%', input: { color: "white", }, }}
                                             InputLabelProps={{ style: { color: 'white' } }}
                                             label="First Name"
                                             value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)}
+                                            onChange={(e) => { setFirstName(e.target.value); setFirstNameError('') }}
+                                            helperText={firstNameError.length > 0 ? firstNameError : null}
                                         />
                                         <TextField
                                             variant="filled"
-                                            error={userNameError.length > 0}
+                                            error={lastNameError.length > 0}
                                             id="lastName"
                                             sx={{ width: '100%', input: { color: "white", }, }}
                                             InputLabelProps={{ style: { color: 'white' } }}
                                             label="Last Name"
                                             value={lastName}
-                                            onChange={(e) => setLastName(e.target.value)}
+                                            onChange={(e) => { setLastName(e.target.value); setLastNameError('') }}
+                                            helperText={lastNameError.length > 0 ? lastNameError : null}
                                         />
 
                                     </Stack>
@@ -261,6 +346,8 @@ const Login = (props: any) => {
                                                 type={showPassword ? 'text' : 'password'}
                                                 sx={{ input: { color: "white", } }}
                                                 onChange={getPassword}
+                                                error={passBool}
+                                                aria-activedescendant='password-helper-text'
                                                 endAdornment={
                                                     <InputAdornment position="end">
                                                         <IconButton
@@ -274,6 +361,7 @@ const Login = (props: any) => {
                                                     </InputAdornment>
                                                 }
                                             />
+                                            {passBool ? <FormHelperText id="password-helper-text" sx={{ color: 'red' }}>{passwordError}</FormHelperText> : null}
                                         </FormControl>
 
                                         <FormControl sx={{ width: '100%' }} variant="filled">
@@ -283,6 +371,7 @@ const Login = (props: any) => {
                                                 type={showConfPassword ? 'text' : 'password'}
                                                 sx={{ input: { color: "white", } }}
                                                 onChange={getConfPassword}
+                                                error={passBool}
                                                 endAdornment={
                                                     <InputAdornment position="end">
                                                         <IconButton
@@ -328,7 +417,10 @@ const Login = (props: any) => {
                                                     ...params.inputProps,
                                                     autoComplete: 'new-password', // disable autocomplete and autofill
                                                 }}
+                                                error={countryError.length > 0}
+                                                helperText={countryError.length > 0 ? countryError : null}
                                             />
+                                            
                                         )}
                                     />
                                     <Stack

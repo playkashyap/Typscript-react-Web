@@ -20,23 +20,6 @@ const client = new MongoClient(uri, {
     }
 });
 
-async function run() {
-    try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("PortfolioKash").command({ ping: 1 });
-
-        // const collection = client.db("PortfolioKash").collection("Users");
-        // const documents = await collection.find({}).toArray();
-        console.log("Connected successfully to server");
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
-}
-run().catch(console.dir);
-
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -102,12 +85,11 @@ app.post('/login', async (req, res) => {
 
 
 app.post('/register', async (req, res) => {
-    const { username, password, firstName, lastName, email, gender, nationality, phoneNumber } = req.body;
-
+    const { username, password, confPassword, firstName, lastName, email, gender, country, phoneNumber } = req.body;
     let validations = [];
-    let regexNumber = /^(?=.*[0-9])/; // checks if password contains at least one number
-    let regexSpecialChar = /^(?=.*[!@#$%^&*])/; // checks if password contains at least one special character
-    let regexUppercase = /^(?=.*[A-Z])/; // checks if password contains at least one uppercase letter
+    let regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[a-z])/;
+
+    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     let passwordMessage = '';
 
@@ -117,39 +99,33 @@ app.post('/register', async (req, res) => {
         if (username && (username.length > 10 || username.length <= 4)) validations.push({ key: 'username', message: 'Username should be between 5 to 9 characters long' })
     }
 
-    if (password) {
-        if (password.length < 8 || password.length > 20) {
-            passwordMessage += 'Password Sould be Between between 8 to 20 characters.';
-        } else {
+    if (password !== confPassword) {
+        validations.push({ key: 'password', message: 'Password and Confirm Password should be same' });
+    }
+    else {
+        if (password) {
+            if (password.length < 8 || password.length > 20) {
+                passwordMessage = 'Password Sould be Between between 8 to 20 characters.';
+            } else {
 
-            if (!regexNumber.test(password)) {
-                passwordMessage += 'Should contain at least one number, ';
-            } else {
-                passwordMessage = ''
+                if (!regex.test(password)) {
+                    passwordMessage = 'Password should contain atleast one number, one special character and one uppercase letter.';
+                }
             }
-            if (!regexSpecialChar.test(password)) {
-                passwordMessage += 'Should contain at least one special character, ';
-            } else {
-                passwordMessage = ''
-            }
-            if (!regexUppercase.test(password)) {
-                passwordMessage += 'Should contain at least one uppercase letter. ';
-            } else {
-                passwordMessage = ''
-            }
+        } else {
+            passwordMessage = 'Password is required.';
         }
-    } else {
-        passwordMessage = 'Password is required.';
     }
 
     if (passwordMessage) {
-        validations.push({ key: 'password', message: passwordMessage.trim() });
+        validations.push({ key: 'password', message: passwordMessage });
     }
     if (!firstName) validations.push({ key: 'firstName', message: 'First name is required' });
     if (!lastName) validations.push({ key: 'lastName', message: 'Last name is required' });
     if (!email) validations.push({ key: 'email', message: 'Email is required' });
+    else if (!emailRegex.test(email)) validations.push({ key: 'email', message: 'Email is not valid' });
     if (!gender) validations.push({ key: 'gender', message: 'Gender is required' });
-    if (!nationality) validations.push({ key: 'nationality', message: 'Nationality is required' });
+    if (!country) validations.push({ key: 'country', message: 'Nationality is required' });
     if (!phoneNumber) validations.push({ key: 'phoneNumber', message: 'Phone number is required' });
 
 
@@ -158,6 +134,8 @@ app.post('/register', async (req, res) => {
         res.status(400).json({ status: 'error', validations: validations });
         return;
     }
+
+
 
     try {
         await client.connect();
@@ -176,7 +154,7 @@ app.post('/register', async (req, res) => {
                 lastName,
                 email,
                 gender,
-                nationality,
+                country,
                 phoneNumber
             });
 
