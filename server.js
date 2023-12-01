@@ -69,7 +69,15 @@ app.post('/login', async (req, res) => {
             bcrypt.compare(password, user.password, async (err, result) => {
                 if (result) {
                     const token = jwt.sign({ username: user.username }, 'your-secret-key', { expiresIn: '1h' });
-                    res.json({ status: 'success', message: 'Login successful!', token: token });
+
+                    // Create a new object with user's full name, user id, and gender
+                    const userInfo = {
+                        fullName: user.firstName + ' ' + user.lastName,
+                        userId: user.userId, // Assuming the user id is stored in _id
+                        gender: user.gender
+                    };
+
+                    res.json({ status: 'success', message: 'Login successful!', token: token, user: userInfo });
                 } else {
                     res.status(400).json({ status: 'error', message: 'Invalid username or password' });
                 }
@@ -142,7 +150,7 @@ app.post('/register', async (req, res) => {
         const db = client.db("PortfolioKash");
         const collection = db.collection("Users");
         const countersCollection = db.collection("Counters");
-    
+
         // Get the counter document for userId
         let counter = await countersCollection.findOne({ _id: "userId" });
         if (!counter) {
@@ -150,12 +158,12 @@ app.post('/register', async (req, res) => {
             await countersCollection.insertOne({ _id: "userId", seq: 0 });
             counter = await countersCollection.findOne({ _id: "userId" });
         }
-    
+
         // Increment the userId
         const userId = counter.seq + 1;
-    
+
         const existingUser = await collection.findOne({ username });
-    
+
         if (existingUser) {
             res.status(400).json({ status: 'error', message: 'Username already exists' });
         } else {
@@ -171,11 +179,11 @@ app.post('/register', async (req, res) => {
                 country,
                 phoneNumber
             });
-    
+
             if (result.acknowledged === true) {
                 // Update the counter in the database
                 await countersCollection.updateOne({ _id: "userId" }, { $set: { seq: userId } });
-    
+
                 res.json({ status: 'success', message: 'Registration successful!' });
             } else {
                 res.status(400).json({ status: 'error', message: 'Registration failed' });
