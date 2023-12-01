@@ -42,6 +42,13 @@ const Login = (props: any) => {
     const [password, setPassword] = React.useState('');
     const [errorInCredantials, setErrorInCredantials] = React.useState(false);
 
+    const [showLoginPassword, setShowLoginPassword] = React.useState(false);
+
+    const handleClickShowLoginPassword = () => setShowLoginPassword((show) => !show);
+    const handleMouseDownLoginPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    }
+
     // for signup
 
 
@@ -60,9 +67,11 @@ const Login = (props: any) => {
 
     // gender 
     const [gender, setGender] = React.useState('');
+    const [genderError, setGenderError] = React.useState('');
 
     // phone 
     const [phone, setPhone] = React.useState('');
+    const [phoneError, setPhoneError] = React.useState('');
 
     // country
     const [country, setCountry] = React.useState('');
@@ -90,7 +99,8 @@ const Login = (props: any) => {
     };
 
     const handlePhoneChange = (newPhone: any) => {
-        setPhone(newPhone)
+        setPhone(newPhone);
+        setPhoneError('');
     }
 
 
@@ -139,6 +149,7 @@ const Login = (props: any) => {
 
     const handleGenderChange = (event: SelectChangeEvent) => {
         setGender(event.target.value as string);
+        setGenderError('');
     };
 
     const handleCountryChange = (event: any) => {
@@ -207,9 +218,14 @@ const Login = (props: any) => {
                         case 'country':
                             setCountryError(item.message);
                             break;
+                        case 'gender':
+                            setGenderError(item.message);
+                            break;
+                        case 'phoneNumber':
+                            setPhoneError(item.message);
+                            break;
                         default:
                             break;
-
                     }
                 }
 
@@ -253,17 +269,34 @@ const Login = (props: any) => {
                                         label="Username" variant="filled"
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
+                                        helperText={errorInCredantials ? 'Invalid Username or Password' : null}
                                     />
-                                    <TextField
-                                        error={errorInCredantials}
-                                        id="newpass"
-                                        sx={{ width: '100%', marginTop: 3, input: { color: "white", } }}
-                                        InputLabelProps={{ style: { color: 'white' } }}
-                                        label="Password"
-                                        variant="filled"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
+                                    <FormControl sx={{ width: '100%', marginTop: 3 }} variant="filled">
+                                        <InputLabel htmlFor="filled-adornment-password" sx={{ color: "white" }} >Password</InputLabel>
+                                        <FilledInput
+                                            id="filled-adornment-password"
+                                            type={showLoginPassword ? 'text' : 'password'}
+                                            sx={{ input: { color: "white", } }}
+                                            onChange={(e) => { setPassword(e.target.value); setErrorInCredantials(false) }}
+                                            error={errorInCredantials}
+                                            aria-activedescendant='password-helper-text'
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowLoginPassword}
+                                                        onMouseDown={handleMouseDownLoginPassword}
+                                                        edge="end"
+                                                    >
+                                                        {showLoginPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                        />
+                                        {errorInCredantials ? <FormHelperText id="password-helper-text" sx={{ color: '#d32f2f' }}>Invalid username or password</FormHelperText> : null}
+                                    </FormControl>
+
+
                                 </Box>
                                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
                                     <Button variant="contained" endIcon={<LoginIcon />} onClick={() => login()}>
@@ -361,7 +394,7 @@ const Login = (props: any) => {
                                                     </InputAdornment>
                                                 }
                                             />
-                                            {passBool ? <FormHelperText id="password-helper-text" sx={{ color: 'red' }}>{passwordError}</FormHelperText> : null}
+                                            {passBool ? <FormHelperText id="password-helper-text" sx={{ color: '#d32f2f' }}>{passwordError}</FormHelperText> : null}
                                         </FormControl>
 
                                         <FormControl sx={{ width: '100%' }} variant="filled">
@@ -420,7 +453,7 @@ const Login = (props: any) => {
                                                 error={countryError.length > 0}
                                                 helperText={countryError.length > 0 ? countryError : null}
                                             />
-                                            
+
                                         )}
                                     />
                                     <Stack
@@ -433,23 +466,29 @@ const Login = (props: any) => {
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-
+                                                error={genderError.length > 0}
                                                 value={gender}
                                                 sx={{ color: "white" }}
                                                 label="Gender"
                                                 onChange={handleGenderChange}
+
                                             >
                                                 <MenuItem value={'male'}>Male</MenuItem>
                                                 <MenuItem value={'female'}>Female</MenuItem>
                                                 <MenuItem value={'other'}>Other</MenuItem>
                                             </Select>
+                                            {genderError.length > 0 ? <FormHelperText id="password-helper-text" sx={{ color: '#d32f2f' }}>{passwordError}</FormHelperText> : null}
                                         </FormControl>
                                         <MuiTelInput
                                             sx={{ width: '100%', color: "white", input: { color: "white" } }}
                                             value={phone}
+                                            InputLabelProps={{ style: { color: 'white' } }}
                                             variant='filled'
                                             defaultCountry="IN"
                                             onChange={handlePhoneChange}
+                                            label="Phone Number"
+                                            error={phoneError.length > 0}
+                                            helperText={phoneError.length > 0 ? phoneError : null}
                                         />
                                     </Stack>
 

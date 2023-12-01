@@ -96,7 +96,7 @@ app.post('/register', async (req, res) => {
     if (!username) {
         validations.push({ key: 'username', message: 'Username is required' });
     } else {
-        if (username && (username.length > 10 || username.length <= 4)) validations.push({ key: 'username', message: 'Username should be between 5 to 9 characters long' })
+        if (username && (username.length > 15 || username.length <= 4)) validations.push({ key: 'username', message: 'Username should be between 5 to 15 characters long' })
     }
 
     if (password !== confPassword) {
@@ -141,13 +141,27 @@ app.post('/register', async (req, res) => {
         await client.connect();
         const db = client.db("PortfolioKash");
         const collection = db.collection("Users");
+        const countersCollection = db.collection("Counters");
+    
+        // Get the counter document for userId
+        let counter = await countersCollection.findOne({ _id: "userId" });
+        if (!counter) {
+            // If not found, create it
+            await countersCollection.insertOne({ _id: "userId", seq: 0 });
+            counter = await countersCollection.findOne({ _id: "userId" });
+        }
+    
+        // Increment the userId
+        const userId = counter.seq + 1;
+    
         const existingUser = await collection.findOne({ username });
-
+    
         if (existingUser) {
             res.status(400).json({ status: 'error', message: 'Username already exists' });
         } else {
             const hashedPassword = await bcrypt.hash(password, 10);
             const result = await collection.insertOne({
+                userId, // Use the incremented userId
                 username,
                 password: hashedPassword,
                 firstName,
@@ -157,8 +171,11 @@ app.post('/register', async (req, res) => {
                 country,
                 phoneNumber
             });
-
+    
             if (result.acknowledged === true) {
+                // Update the counter in the database
+                await countersCollection.updateOne({ _id: "userId" }, { $set: { seq: userId } });
+    
                 res.json({ status: 'success', message: 'Registration successful!' });
             } else {
                 res.status(400).json({ status: 'error', message: 'Registration failed' });
