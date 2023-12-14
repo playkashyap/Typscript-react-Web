@@ -257,7 +257,7 @@ const Login = (props: any) => {
                         <Card sx={{ minWidth: 300, maxWidth: 600, background: 'transparent', boxShadow: 'none' }}>
                             <CardContent>
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <Avatar sx={{ width: 190, height: 190 }} src='/android-chrome-512x512.png'></Avatar>
+                                    <Avatar sx={{ width: 190, height: 190 }} src='./logo.jpg'></Avatar>
                                 </div>
                                 <h1 style={{ textAlign: 'center', marginTop: '30px', marginBottom: '30px', color: 'whitesmoke' }}>Login</h1>
                                 <Box component="form">
@@ -314,7 +314,7 @@ const Login = (props: any) => {
                     <div className="loginCard">
                         <Card sx={{ minWidth: 300, maxWidth: 1000, background: 'transparent', boxShadow: 'none' }}>
                             <CardContent>
-                                <h1 style={{ textAlign: 'center', marginTop: '30px', color: 'whitesmoke' }}>Register</h1>
+                                <h1 style={{ textAlign: 'center', margin: 3, color: 'whitesmoke' }}>Register</h1>
 
                                 <Box component="form">
                                     <TextField

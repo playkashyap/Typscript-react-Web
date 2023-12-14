@@ -93,7 +93,7 @@ function MyApp(props : any) {
                         <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
                             {theme.palette.mode === 'dark' ? <Brightness7Icon sx={{ color: '#fff' }} /> : <Brightness4Icon sx={{ color: '#000' }} />}
                         </IconButton>
-                        <NavLink to={'/admin'}>
+                        <NavLink to={'/'}>
                             <Button sx={{ color: theme.palette.mode === 'dark' ? '#fff' : '#000' }}>
                                 Home
                             </Button>
