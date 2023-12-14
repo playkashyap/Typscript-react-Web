@@ -25,7 +25,9 @@ app.use(cors());
 
 
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server is running on port ${port}`);
+  });
 
 // Middleware for verifying JWT
 function verifyToken(req, res, next) {
@@ -56,6 +58,8 @@ app.get('/express_backend', verifyToken, (req, res) => {
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
+    console.log(username, password);
+
     try {
         await client.connect();
 
@@ -64,6 +68,8 @@ app.post('/login', async (req, res) => {
         const collection = db.collection("Users");
 
         const user = await collection.findOne({ username: username });
+
+        console.log(user);
 
         if (user) {
             bcrypt.compare(password, user.password, async (err, result) => {

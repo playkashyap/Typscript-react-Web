@@ -19,7 +19,7 @@ const apiService = (URL: any, Meathod: any, Body?: any) => {
     }
 
     const apiResponse = ajax({
-        url: `http://localhost:3000/${URL}`,
+        url: `http://192.168.1.3:3000/${URL}`,
         method: Meathod,
         headers: Headers,
         body: Body
