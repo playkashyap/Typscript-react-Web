@@ -47,7 +47,7 @@ function verifyToken(req, res, next) {
     } else {
         res.status(403).json({ message: 'Unauthorized' });
     }
-}
+}  
 
 // Use the middleware in your route
 app.get('/express_backend', verifyToken, (req, res) => {
@@ -68,6 +68,7 @@ app.post('/login', async (req, res) => {
         const collection = db.collection("Users");
 
         const user = await collection.findOne({ username: username });
+        
 
         console.log(user);
 
